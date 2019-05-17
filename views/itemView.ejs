@@ -18,11 +18,6 @@ tr:nth-child(even) {
   background-color: #dddddd;
 }
 
-form {
-     display:inline;
-     margin:0px;
-     padding:0px;
-}
 </style>
 
 </head>
@@ -69,19 +64,48 @@ form {
 <br>
 
 <script>
+function isEmpty(obj) {
+  for (const n in obj) if (hasOwnProperty(obj, n) && obj[n]) return false; // eslint-disable-line
+  return true; 
+}
 
-function checkExisting() {
+function removeItem() {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", `/items/${document.getElementById('itemID').value}`, true);
+    xmlHttp.open("DELETE", `/items/${document.getElementById('itemID').value}`, true);
+
     xmlHttp.onreadystatechange = function(){
         if(xmlHttp.readyState==4 && xmlHttp.status == 200){
-            
-        }
+            alert(`${document.getElementById('itemID').value} successfully removed!`);
+            document.location.reload();
+        } 
     }
     xmlHttp.send();
 }
 
-function itemAddOrUpdate() {
+
+function updateItem() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("PUT", `/items/${document.getElementById('itemID').value}`, true);
+    xmlHttp.setRequestHeader("Content-type", "application/json");
+
+    var item = {
+        name: document.getElementById('name').value,
+        quantity: document.getElementById('quantity').value,
+        amount: document.getElementById('amount').value
+    }
+
+    xmlHttp.onreadystatechange = function(){
+        if(xmlHttp.readyState==4 && xmlHttp.status == 200){
+            alert(`${document.getElementById('itemID').value} successfully updated!`);
+            document.location.reload();
+        } else {
+            console.log(xmlHttp.response);
+        }
+    }
+    xmlHttp.send(JSON.stringify(item));
+}
+
+function addItem() {
     // add if not existing ID
     
     var xmlHttp = new XMLHttpRequest();
@@ -96,11 +120,12 @@ function itemAddOrUpdate() {
 
     xmlHttp.onreadystatechange = function(){
         if(xmlHttp.readyState==4 && xmlHttp.status == 200){
-            alert(`${item.name} successfully saved!`);
+            alert(`${item.name} successfully saved! with id of : ${xmlHttp.response}`);
             document.location.reload();
         }
     }
 
+    console.log(JSON.stringify(item));
     xmlHttp.send(JSON.stringify(item));
 }
 
@@ -118,8 +143,10 @@ function itemAddOrUpdate() {
   <input id='amount' type="number" value="0" name="amount" min="0" maxlength="7"> 
   
 </form> 
-   &nbsp;&nbsp; <button onclick="itemAddOrUpdate()">Save</button>
-    &nbsp; <button onclick="itemAddOrUpdate()">Delete</button>
+<br>
+   &nbsp;&nbsp; <button onclick="addItem()">Add</button>
+   &nbsp;&nbsp; <button onclick="updateItem()">Update</button>
+    &nbsp; <button onclick="removeItem()">Delete</button>
 </div>
 
 </body>

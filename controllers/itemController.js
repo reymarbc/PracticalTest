@@ -38,7 +38,8 @@ exports.read_an_item = function(req, res) {
   
 exports.update_an_item = function(req, res) {
     Item.updateByID(req.params.itemID, req.body, function(err, item) {
-        if (err)
+
+          if (err)
             res.send(err);
         res.json(item);
     });
