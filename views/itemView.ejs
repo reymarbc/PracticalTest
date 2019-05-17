@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, form {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+form {
+     display:inline;
+     margin:0px;
+     padding:0px;
+}
+</style>
+
+</head>
+<body>
+<div align="center">
+<h2>Item Table</h2>
+<table>
+  <tr id='itemStart'>
+    <th width="10%"><center>ID<center></th>
+    <th>Name</th>
+    <th width="10%">Quantity</th>
+    <th width="10%">Amount</th>
+  </tr>
+
+    <script>
+
+    // List all items
+
+        var xmlHttp = new XMLHttpRequest();
+
+        xmlHttp.onreadystatechange = function(){
+            if(xmlHttp.readyState==4 && xmlHttp.status == 200){
+                var tableStringData = '';
+                JSON.parse(xmlHttp.response).forEach(element => {
+                    tableStringData += (`\n<tr>\n
+                        <td><center> ${element.intID} </center></td>\n
+                        <td>${element.strName}</td>\n
+                        <td>${element.intQuantity}</td>\n
+                        <td>${element.dcmlAmount}</td>\n
+                        </tr>`);
+                });
+            //    console.log(tableStringData);
+                document.getElementById('itemStart').insertAdjacentHTML('afterend', tableStringData);
+            //    document.getElementById('itemTable').innerHTML = itemTable;
+            }
+
+        }
+
+        xmlHttp.open("GET", "/items", true);
+        xmlHttp.send();
+    </script>
+
+</table>
+<br>
+
+<script>
+
+function checkExisting() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", `/items/${document.getElementById('itemID').value}`, true);
+    xmlHttp.onreadystatechange = function(){
+        if(xmlHttp.readyState==4 && xmlHttp.status == 200){
+            
+        }
+    }
+    xmlHttp.send();
+}
+
+function itemAddOrUpdate() {
+    // add if not existing ID
+    
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "/items", true);
+    xmlHttp.setRequestHeader("Content-type", "application/json");
+
+    var item = {
+        name: document.getElementById('name').value,
+        quantity: document.getElementById('quantity').value,
+        amount: document.getElementById('amount').value
+    }
+
+    xmlHttp.onreadystatechange = function(){
+        if(xmlHttp.readyState==4 && xmlHttp.status == 200){
+            alert(`${item.name} successfully saved!`);
+            document.location.reload();
+        }
+    }
+
+    xmlHttp.send(JSON.stringify(item));
+}
+
+</script>
+
+
+<form action="#">
+  Item ID:
+  <input id='itemID' type="number" name="itemID" min="0" value="0">
+  &nbsp; Name:
+  <input id='name' type="text" name="name"> 
+  &nbsp; Quantity:
+  <input id='quantity' type="number" value="0" name="quantity" min="0" maxlength = "6">
+  &nbsp; Amount:
+  <input id='amount' type="number" value="0" name="amount" min="0" maxlength="7"> 
+  
+</form> 
+   &nbsp;&nbsp; <button onclick="itemAddOrUpdate()">Save</button>
+    &nbsp; <button onclick="itemAddOrUpdate()">Delete</button>
+</div>
+
+</body>
+</html>

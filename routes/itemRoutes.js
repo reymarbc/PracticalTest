@@ -4,6 +4,10 @@
 module.exports = function(app) {
   var itemController = require('../controllers/itemController');
 
+  app.get('/', (req, res) => {
+    res.render('itemView');
+  });
+
   // itemController Routes
   app.route('/items')
     .get(itemController.list_all_items)

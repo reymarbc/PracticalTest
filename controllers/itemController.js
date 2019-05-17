@@ -8,7 +8,7 @@ exports.list_all_items = function(req, res) {
         if (err)
             res.send(err);
             
-        res.send(items);
+        res.json(items);
     }); 
 };
 

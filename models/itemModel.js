@@ -37,6 +37,7 @@ Item.getItemByID = (itemID, result) => {
 
 Item.getAllItems = (result) => {
     sql.query("SELECT * FROM tblItems", function (err, res) {
+        console.log("Loading items");
         queryCallback(err, res, result);
     });   
 };
