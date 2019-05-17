@@ -160,6 +160,7 @@ function addItem() {
     }
 
     xmlHttp.onreadystatechange = function(){
+        console.log(xmlHttp.status);
         if(xmlHttp.readyState==4 && xmlHttp.status == 200){
             alert(`${item.name} successfully saved! with id of : ${xmlHttp.response}`);
             document.location.reload();
@@ -180,15 +181,15 @@ function addItem() {
   &nbsp; Name:
   <input id='name' type="text" name="name"> 
   &nbsp; Quantity:
-  <input id='quantity' type="number" value="0" name="quantity" min="0" maxlength = "6">
+  <input id='quantity' type="number" value="0" name="quantity" min="0" max="9999999999">
   &nbsp; Amount:
-  <input id='amount' type="number" value="0" name="amount" min="0" maxlength="7"> 
+  <input id='amount' type="number" value="0" name="amount" min="0" max="9999999999"> 
   
-</form> 
 <br>
-   &nbsp;&nbsp; <button style="font-size:20px;" onclick="addItem()">Add</button>
-   &nbsp;&nbsp; <button style="font-size:20px;"  onclick="updateItem()">Update</button>
-    &nbsp; <button style="font-size:20px;" onclick="removeItem()">Delete</button>
+   &nbsp;&nbsp; <button type="submit" style="font-size:20px;" onclick="addItem()">Add</button>
+   &nbsp;&nbsp; <button type="submit" style="font-size:20px;"  onclick="updateItem()">Update</button>
+    &nbsp; <button type="submit" style="font-size:20px;" onclick="removeItem()">Delete</button>
+</form> 
 </div>
 
 </body>

@@ -22,7 +22,7 @@ exports.create_an_item = function(req, res) {
     
         Item.createItem(new_item, function(err, item) {
             if (err)
-                res.status(400).send(err);
+                res.send(err);
             else 
                 res.json(item);
         });
