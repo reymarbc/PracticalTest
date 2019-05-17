@@ -7,8 +7,8 @@ exports.list_all_items = function(req, res) {
 
         if (err)
             res.send(err);
-            
-        res.json(items);
+        else    
+            res.json(items);
     }); 
 };
 
@@ -22,8 +22,9 @@ exports.create_an_item = function(req, res) {
     
         Item.createItem(new_item, function(err, item) {
             if (err)
-                res.send(err);
-            res.json(item);
+                res.status(400).send(err);
+            else 
+                res.json(item);
         });
     }
 };
@@ -32,16 +33,17 @@ exports.read_an_item = function(req, res) {
     Item.getItemByID(req.params.itemID, function(err, item) {
         if (err)
             res.send(err);
-        res.json(item);
+        else 
+            res.json(item);
     });
 };
   
 exports.update_an_item = function(req, res) {
     Item.updateByID(req.params.itemID, req.body, function(err, item) {
-
-          if (err)
-            res.send(err);
-        res.json(item);
+        if (err)
+           res.send(err);
+        else
+            res.json(item);
     });
 };
   
@@ -49,6 +51,7 @@ exports.delete_an_item = function(req, res) {
     Item.removeByID( req.params.itemID, function(err, item) {
         if (err)
             res.send(err);
-        res.json({ message: 'Item successfully deleted' });
+        else
+            res.json(item);
     });
 };

@@ -75,8 +75,14 @@ function removeItem() {
 
     xmlHttp.onreadystatechange = function(){
         if(xmlHttp.readyState==4 && xmlHttp.status == 200){
-            alert(`${document.getElementById('itemID').value} successfully removed!`);
-            document.location.reload();
+            console.log(xmlHttp.response);
+            let response = JSON.parse(xmlHttp.response);
+            if (!response.affectedRows) {
+                alert(`${document.getElementById('itemID').value} doesn't exist!`);
+            } else {
+                alert(`${document.getElementById('itemID').value} successfully removed!`);
+                document.location.reload();
+            }
         } 
     }
     xmlHttp.send();
@@ -95,12 +101,18 @@ function updateItem() {
     }
 
     xmlHttp.onreadystatechange = function(){
+        console.log(xmlHttp.readyState + ", " + xmlHttp.status);
         if(xmlHttp.readyState==4 && xmlHttp.status == 200){
-            alert(`${document.getElementById('itemID').value} successfully updated!`);
-            document.location.reload();
-        } else {
-            console.log(xmlHttp.response);
-        }
+            let response = JSON.parse(xmlHttp.response);
+            if (!response.affectedRows) {
+                alert(`${document.getElementById('itemID').value} doesn't exist!`);
+            } else if (!response.changedRows) {
+                alert(`${document.getElementById('itemID').value} not changed!`);
+            } else {
+                alert(`${document.getElementById('itemID').value} successfully updated!`);
+                document.location.reload();
+            }
+        } 
     }
     xmlHttp.send(JSON.stringify(item));
 }
@@ -122,10 +134,11 @@ function addItem() {
         if(xmlHttp.readyState==4 && xmlHttp.status == 200){
             alert(`${item.name} successfully saved! with id of : ${xmlHttp.response}`);
             document.location.reload();
+        } else if (xmlHttp.readyState==4 && xmlHttp.status == 400) {
+            alert(`${item.name} is already saved!`);
         }
     }
 
-    console.log(JSON.stringify(item));
     xmlHttp.send(JSON.stringify(item));
 }
 
